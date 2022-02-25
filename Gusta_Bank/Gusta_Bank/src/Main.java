@@ -213,8 +213,53 @@ public class Main {
 		int opcao = tec.nextInt();
 		switch(opcao) {
 		case 1:
+			menuUsuarioCorrente(opcao);
+			break;
+		case 2:
+			menuUsuarioCredito();
+			break;
+		case 3:
+			menuUsuarioPoupanca();
 			break;
 		}
+	}
+			
+		
+		
+	
+
+
+	private static void menuUsuarioCorrente(int opcao) {
+		System.out.print("Informe o número da conta: ");
+		int conta = tec.nextInt();
+		
+		for(int i =0; i < Corrente.listaCorrentes.size();i++) {
+			if(Corrente.listaCorrentes.get(i).getNumero() == conta) {
+				menuCorrente();
+			}
+		}
+		
+		
+	}
+	
+	private static void menuCorrente() {
+		System.out.println("--- MENU CORRENTE ---"
+				+ "\n1- Saque"
+				+ "\n2- Saldo"
+				+ "\n3- Pagamento"
+				+ "\n4- Depósito"
+				+ "\n5- Transferência"
+				+ "\n6- Voltar");
+		
+	}
+
+	private static void menuUsuarioPoupanca() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private static void menuUsuarioCredito() {
+		// TODO Auto-generated method stub
 		
 	}
 }
