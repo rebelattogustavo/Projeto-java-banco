@@ -16,7 +16,7 @@ public class Credito extends Conta{
 	static ArrayList<Credito> listaCreditos = new ArrayList<Credito>();
 
 	
-	public double getlimite() {
+	public double getLimite() {
 		return limite;
 	}
 	
@@ -44,7 +44,9 @@ public class Credito extends Conta{
 	}
 	
 	
-	
+	public static void pagamento() {
+		
+	}
 	
 	
 }

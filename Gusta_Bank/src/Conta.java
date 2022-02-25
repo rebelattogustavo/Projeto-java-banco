@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Conta {
 	
-	
+	static Scanner tec = new Scanner(System.in);
 	
 	private double saldo;
 	private String titular, senha;
@@ -94,11 +94,50 @@ public class Conta {
 				+ "\nStatus: " + status + "\nSaldo: " + saldo ;
 	}
 
-	public void saque() {
+	public static void verSaldo(int indice, int opcao){
+		switch(opcao) {
+		case 1:
+			System.out.println(Corrente.listaCorrentes.get(indice).getSaldo());
+			break;
+		case 2:
+			Credito.listaCreditos.get(indice).getSaldo();
+			break;
+		case 3:
+			Poupanca.listaPoupancas.get(indice).getSaldo();
+			break;
+		}
+	}
+	
+	public static void saque(int indice, int opcao) {
+		System.out.print("Informe o valor do saque: R$");
+		double saque = tec.nextDouble();
+		
+		switch(opcao) {
+		case 1:
+			if(Corrente.listaCorrentes.get(indice).getSaldo() >= saque) {
+				Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - saque);
+				
+			}else {
+				System.out.println("Saldo indisponível!");
+			}
+			break;
+		case 2:
+			if(Credito.listaCreditos.get(indice).getSaldo() >= saque) {
+				Credito.listaCreditos.get(indice).setSaldo(Credito.listaCreditos.get(indice).getSaldo() - saque);				
+			}else {
+				System.out.println("Saldo indisponível!");
+			}
+			break;
+		case 3:
+			if(Poupanca.listaPoupancas.get(indice).getSaldo() >= saque) {
+				Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() - saque);				
+			}else {
+				System.out.println("Saldo indisponível!");
+				
+			}
+			break;
+		}
 		
 	}
 	
-	public void saldo() {
-		
-	}
 }
