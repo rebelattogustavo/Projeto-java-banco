@@ -23,7 +23,7 @@ public class Corrente extends Conta{
 				Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - pagamento);
 				System.out.println("Pagamento efetuado!");
 			}else {
-				System.out.println("Saldo indisponï¿½vel!");
+				System.out.println("Saldo indisponível!");
 			}
 			break;
 		case 2:
@@ -31,29 +31,29 @@ public class Corrente extends Conta{
 				Credito.listaCreditos.get(indice).setSaldo(Credito.listaCreditos.get(indice).getSaldo() - pagamento);			
 				System.out.println("Pagamento efetuado!");
 			}else {
-				System.out.println("Saldo indisponï¿½vel!");
+				System.out.println("Saldo indisponível!");
 			}
 			break;
 		}
 		
 	}
 	public static void deposito(int indice) {
-		System.out.println("Informe o valor do depÃ³sito: R$");
+		System.out.println("Informe o valor do depósito: R$");
 		double deposito = tec.nextDouble();
 		
 		Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() + deposito);
 		
 	}
 	public static void transferencia(int indice) {
-		System.out.println("--- MENU TRANSFERï¿½NCIA ---"
+		System.out.println("--- MENU TRANSFERÊNCIA ---"
 				+ "\n1- Corrente"
-				+ "\n2Poupanï¿½a");
+				+ "\n2Poupança");
 		int opcao = tec.nextInt();
 		
-		System.out.println("Informe o valor da transferï¿½ncia: R$");
+		System.out.println("Informe o valor da transferência: R$");
 		double transferencia = tec.nextDouble();
 		
-		System.out.print("Informe o nï¿½mero da conta que serï¿½ transferido o dinheiro: ");
+		System.out.print("Informe o número da conta que será transferido o dinheiro: ");
 		int numero = tec.nextInt();
 		if(Corrente.listaCorrentes.get(indice).getSaldo() + Corrente.listaCorrentes.get(indice).getLimite() >= transferencia) {
 			Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - transferencia);

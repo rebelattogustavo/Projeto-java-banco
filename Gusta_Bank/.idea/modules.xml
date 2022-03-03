@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Projeto-java-banco.iml" filepath="$PROJECT_DIR$/.idea/Projeto-java-banco.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Gusta_Bank.iml" filepath="$PROJECT_DIR$/Gusta_Bank.iml" />
     </modules>
   </component>
 </project>
