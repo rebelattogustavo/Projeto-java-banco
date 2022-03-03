@@ -233,10 +233,10 @@ public class Main {
 			menuUsuarioCorrente(opcao);
 			break;
 		case 2:
-			menuUsuarioCredito();
+			menuUsuarioCredito(opcao);
 			break;
 		case 3:
-			menuUsuarioPoupanca();
+			menuUsuarioPoupanca(opcao);
 			break;
 		case 4:
 			menuPrincipal();
@@ -248,17 +248,21 @@ public class Main {
 	private static void menuUsuarioCorrente(int opcao) {
 		System.out.print("Informe o número da conta: ");
 		int conta = tec.nextInt();
-		
+
+		int valida =0;
+
 		System.out.print("Informe a senha da conta: ");
 		String senha = tec.next();
 		for(int i =0; i < Corrente.listaCorrentes.size();i++) {
 			if(Corrente.listaCorrentes.get(i).getNumero() == conta && Corrente.listaCorrentes.get(i).getSenha().equals(senha)) {
 				int indice = i;
 				menuCorrente(indice, opcao);
-			}else {
+				valida++;
+			}
+		}
+		if(valida == 0){
 				System.out.println("Conta inexistente tente novamente!");
 				menuUsuarioCorrente(opcao);
-			}
 		}
 	}
 	
@@ -290,7 +294,7 @@ public class Main {
 			menuCorrente(indice, opcao);
 			break;
 		case 5:
-			Corrente.transferencia(indice);
+			Corrente.transferencia(indice, opcao);
 			menuCorrente(indice, opcao);
 			break;
 		case 6:
@@ -300,45 +304,97 @@ public class Main {
 		
 	}
 
-	private static void menuUsuarioPoupanca() {
+	private static void menuUsuarioPoupanca(int opcao) {
 		System.out.print("Informe o número da conta: ");
 		int conta = tec.nextInt();
 		
 		System.out.print("Informe a senha da conta: ");
 		String senha = tec.next();
+
+		int valida=0;
 		for(int i =0; i < Poupanca.listaPoupancas.size();i++) {
 			if(Poupanca.listaPoupancas.get(i).getNumero() == conta && Poupanca.listaPoupancas.get(i).getSenha().equals(senha)) {
-				menuPoupanca();
+				int indice = i;
+				menuPoupanca(indice, opcao);
+				valida++;
 			}
-		}		
+		}
+		if(valida == 0){
+			System.out.println("Conta inexistente tente novamente!");
+			menuUsuarioPoupanca(opcao);
+		}
 	}
 	
-	private static void menuPoupanca() {
+	private static void menuPoupanca(int indice, int opcao) {
 		System.out.println("--- MENU POUPANÇA ---"
-				+ "\n1- Saque"
-				+ "\n2- Saldo"
-				+ "\n3- Pagamento"
-				+ "\n4- Depósito"
-				+ "\n5- Transferência"
-				+ "\n6- Voltar");		
-		int opcao = tec.nextInt();
+				+ "\n1- Ver saldo"
+				+ "\n2- Saque"
+				+ "\n3- Depósito"
+				+ "\n4- Transferência"
+				+ "\n5- Voltar");
+		int opcao2 = tec.nextInt();
 		
-		switch(opcao) {
+		switch(opcao2) {
 		case 1:
-			
+			Conta.verSaldo(indice, opcao);
+			menuPoupanca(indice, opcao);
+			break;
+		case 2:
+			Conta.verSaldo(indice, opcao);
+			menuPoupanca(indice, opcao);
+			break;
+		case 3:
+			Conta.saque(indice, opcao);
+			menuPoupanca(indice, opcao);
+			break;
+		case 4:
+			Corrente.transferencia(indice, opcao);
+			menuPoupanca(indice, opcao);
+			break;
 		}
 	}
 
-	private static void menuUsuarioCredito() {
+	private static void menuUsuarioCredito(int opcao) {
 		System.out.print("Informe o número da conta: ");
 		int conta = tec.nextInt();
-		
+
 		System.out.print("Informe a senha da conta: ");
 		String senha = tec.next();
+
+		int valida=0;
 		for(int i =0; i < Credito.listaCreditos.size();i++) {
 			if(Credito.listaCreditos.get(i).getNumero() == conta && Credito.listaCreditos.get(i).getSenha().equals(senha)) {
-				menuPoupanca();
+				int indice = i;
+				menuCredito(indice, opcao);
+				valida++;
 			}
-		}			
+		}
+		if(valida == 0){
+			System.out.println("Conta inexistente tente novamente!");
+			menuUsuarioCredito(opcao);
+		}
 	}
+
+	private static void menuCredito(int indice, int opcao) {
+		System.out.println("--- MENU CRÉDITO ---"
+				+ "\n1- Ver limite" +
+				"\n2- Pagamento"
+				+ "\n5- Voltar");
+		int opcao2 = tec.nextInt();
+
+		switch(opcao2) {
+			case 1:
+				System.out.println(Credito.listaCreditos.get(indice).getLimite());
+				menuCredito(indice, opcao);
+				break;
+			case 2:
+				Corrente.pagamento(indice, opcao);
+				menuCredito(indice, opcao);
+				break;
+			case 3:
+				menuUsuarioCredito(opcao);
+				break;
+		}
+	}
+
 }

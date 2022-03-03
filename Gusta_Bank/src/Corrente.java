@@ -44,40 +44,53 @@ public class Corrente extends Conta{
 		Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() + deposito);
 		
 	}
-	public static void transferencia(int indice) {
+	public static void transferencia(int indice, int opcao) {
 		System.out.println("--- MENU TRANSFERÊNCIA ---"
+				+ "\nInforme o tipo da conta que receberá o dinheiro:"
 				+ "\n1- Corrente"
-				+ "\n2Poupança");
-		int opcao = tec.nextInt();
-		
-		System.out.println("Informe o valor da transferência: R$");
+				+ "\n2- Poupança");
+		int opcao2 = tec.nextInt();
+
+		System.out.print("Informe o valor da transferência: R$");
 		double transferencia = tec.nextDouble();
-		
+
+		int valida =0;
+
 		System.out.print("Informe o número da conta que será transferido o dinheiro: ");
 		int numero = tec.nextInt();
-		if(Corrente.listaCorrentes.get(indice).getSaldo() + Corrente.listaCorrentes.get(indice).getLimite() >= transferencia) {
-			Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - transferencia);
-			switch(opcao) {
+		switch(opcao2) {
 			case 1:
 				for(int i = 0; i < Corrente.listaCorrentes.size(); i++) {
 					if(Corrente.listaCorrentes.get(i).getNumero() == numero){
-						Corrente.listaCorrentes.get(numero).setSaldo(Corrente.listaCorrentes.get(numero).getSaldo() + transferencia);
-					}else {
-						System.out.println("Conta inexistente!");
+						Corrente.listaCorrentes.get(i).setSaldo(Corrente.listaCorrentes.get(i).getSaldo() + transferencia);
+						valida++;
+						System.out.println("Transferência concluída com sucesso!");
 					}
+				}
+				if(valida == 0){
+						System.out.println("Conta inexistente!");
 				}
 				break;
 			case 2:
 				for(int i = 0; i < Poupanca.listaPoupancas.size(); i++) {
 					if(Poupanca.listaPoupancas.get(i).getNumero() == numero){
-						Poupanca.listaPoupancas.get(numero).setSaldo(Poupanca.listaPoupancas.get(numero).getSaldo() + transferencia);
-					}else {
-						System.out.println("Conta inexistente!");
+						Poupanca.listaPoupancas.get(i).setSaldo(Poupanca.listaPoupancas.get(i).getSaldo() + transferencia);
+						valida++;
+						System.out.println("Transferência concluída com sucesso!");
 					}
 				}
+				if(valida == 0){
+						System.out.println("Conta inexistente!");
+				}
 				break;
-			}
-		
+		}
+		switch(opcao){
+			case 1:
+				Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - transferencia);
+				break;
+			case 2:
+				Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() - transferencia);
+				break;
 		}
 	}
 	

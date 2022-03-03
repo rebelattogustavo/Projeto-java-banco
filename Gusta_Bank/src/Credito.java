@@ -42,11 +42,7 @@ public class Credito extends Conta{
 	public String toString() {
 		return super.toString() + "\nLimite: " + limite;
 	}
-	
-	
-	public static void pagamento() {
-		
-	}
+
 	
 	
 }
