@@ -70,10 +70,10 @@ public class Conta {
 		System.out.println("Informe o número da conta: ");
 		this.numero = tec.nextInt();
 	}
-	
-	
-	
-	
+
+
+
+
 	public Conta() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -100,44 +100,45 @@ public class Conta {
 			System.out.println(Corrente.listaCorrentes.get(indice).getSaldo());
 			break;
 		case 2:
-			Credito.listaCreditos.get(indice).getSaldo();
+			System.out.println(Credito.listaCreditos.get(indice).getSaldo());
 			break;
 		case 3:
-			Poupanca.listaPoupancas.get(indice).getSaldo();
+			System.out.println(Poupanca.listaPoupancas.get(indice).getSaldo());
 			break;
 		}
 	}
-	
+
 	public static void saque(int indice, int opcao) {
 		System.out.print("Informe o valor do saque: R$");
 		double saque = tec.nextDouble();
-		
+
 		switch(opcao) {
 		case 1:
 			if(Corrente.listaCorrentes.get(indice).getSaldo() >= saque) {
 				Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - saque);
-				
+
 			}else {
 				System.out.println("Saldo indisponível!");
 			}
 			break;
 		case 2:
 			if(Credito.listaCreditos.get(indice).getSaldo() >= saque) {
-				Credito.listaCreditos.get(indice).setSaldo(Credito.listaCreditos.get(indice).getSaldo() - saque);				
+				Credito.listaCreditos.get(indice).setSaldo(Credito.listaCreditos.get(indice).getSaldo() - saque);
 			}else {
 				System.out.println("Saldo indisponível!");
 			}
 			break;
 		case 3:
 			if(Poupanca.listaPoupancas.get(indice).getSaldo() >= saque) {
-				Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() - saque);				
+				Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() - saque);
 			}else {
 				System.out.println("Saldo indisponível!");
 				
 			}
 			break;
 		}
-		
+
+
 	}
 	
 }

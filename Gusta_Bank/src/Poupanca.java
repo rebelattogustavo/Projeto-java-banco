@@ -31,8 +31,57 @@ public class Poupanca extends Conta{
 	public String toString() {
 		return super.toString() + "\nRendimento: " + rendimento;
 	}
-	
-	
-	
-	
+
+	public static void transferencia(int indice) {
+		System.out.println("--- MENU TRANSFERÊNCIA ---"
+				+ "\n1- Corrente"
+				+ "\n2- Poupança");
+		int opcao = tec.nextInt();
+
+		System.out.print("Informe o valor da transferência: R$");
+		double transferencia = tec.nextDouble();
+
+		System.out.print("Informe o número da conta que será transferido o dinheiro: ");
+		int numero = tec.nextInt();
+		if(Poupanca.listaPoupancas.get(indice).getSaldo()  >= transferencia) {
+			Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() - transferencia);
+			switch(opcao) {
+				case 1:
+					for(int i = 0; i < Corrente.listaCorrentes.size(); i++) {
+						if(Corrente.listaCorrentes.get(i).getNumero() == numero){
+							if(Corrente.listaCorrentes.get(i).isStatus() == true){
+							Corrente.listaCorrentes.get(i).setSaldo(Corrente.listaCorrentes.get(i).getSaldo() + transferencia);
+							}else{
+								System.out.println("Conta desativada!");
+							}
+						}else {
+							System.out.println("Conta inexistente!");
+						}
+					}
+					break;
+				case 2:
+					for(int i = 0; i < Poupanca.listaPoupancas.size(); i++) {
+						if(Poupanca.listaPoupancas.get(i).getNumero() == numero){
+							if(Poupanca.listaPoupancas.get(i).isStatus() == true){
+							Poupanca.listaPoupancas.get(i).setSaldo(Poupanca.listaPoupancas.get(i).getSaldo() + transferencia);
+							}else{
+								System.out.println("Conta desativada!");
+							}
+						}else {
+							System.out.println("Conta inexistente!");
+						}
+					}
+					break;
+			}
+		}else{
+			System.out.println("SALDO INDÍSPONIVEL");
+		}
+	}
+
+	public static void deposito(int indice) {
+		System.out.print("Informe o valor do depósito: R$");
+		double deposito = tec.nextDouble();
+		Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() + deposito);
+	}
+
 }

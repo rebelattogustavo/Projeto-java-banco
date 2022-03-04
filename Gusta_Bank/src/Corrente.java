@@ -28,7 +28,7 @@ public class Corrente extends Conta{
 			break;
 		case 2:
 			if(Credito.listaCreditos.get(indice).getSaldo() + Credito.listaCreditos.get(indice).getLimite() >= pagamento) {
-				Credito.listaCreditos.get(indice).setSaldo(Credito.listaCreditos.get(indice).getSaldo() - pagamento);			
+				Credito.listaCreditos.get(indice).setLimiteVariavel(Credito.listaCreditos.get(indice).getLimiteVariavel() - pagamento);
 				System.out.println("Pagamento efetuado!");
 			}else {
 				System.out.println("Saldo indisponível!");
@@ -38,62 +38,57 @@ public class Corrente extends Conta{
 		
 	}
 	public static void deposito(int indice) {
-		System.out.println("Informe o valor do depósito: R$");
+		System.out.print("Informe o valor do depósito: R$");
 		double deposito = tec.nextDouble();
 		
 		Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() + deposito);
-		
 	}
-	public static void transferencia(int indice, int opcao) {
+	public static void transferencia(int indice) {
 		System.out.println("--- MENU TRANSFERÊNCIA ---"
-				+ "\nInforme o tipo da conta que receberá o dinheiro:"
 				+ "\n1- Corrente"
 				+ "\n2- Poupança");
-		int opcao2 = tec.nextInt();
+		int opcao = tec.nextInt();
 
-		System.out.print("Informe o valor da transferência: R$");
+		System.out.println("Informe o valor da transferência: R$");
 		double transferencia = tec.nextDouble();
-
-		int valida =0;
 
 		System.out.print("Informe o número da conta que será transferido o dinheiro: ");
 		int numero = tec.nextInt();
-		switch(opcao2) {
-			case 1:
-				for(int i = 0; i < Corrente.listaCorrentes.size(); i++) {
-					if(Corrente.listaCorrentes.get(i).getNumero() == numero){
-						Corrente.listaCorrentes.get(i).setSaldo(Corrente.listaCorrentes.get(i).getSaldo() + transferencia);
-						valida++;
-						System.out.println("Transferência concluída com sucesso!");
+		if(Corrente.listaCorrentes.get(indice).getSaldo() + Corrente.listaCorrentes.get(indice).getLimite() >= transferencia) {
+			Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - transferencia);
+			switch(opcao) {
+				case 1:
+					for(int i = 0; i < Corrente.listaCorrentes.size(); i++) {
+						if(Corrente.listaCorrentes.get(i).getNumero() == numero){
+							if(Corrente.listaCorrentes.get(i).isStatus() == true){
+								Corrente.listaCorrentes.get(i).setSaldo(Corrente.listaCorrentes.get(i).getSaldo() + transferencia);
+							}else{
+								System.out.println("Conta desativada!");
+							}
+						}else {
+							System.out.println("Conta inexistente!");
+						}
 					}
-				}
-				if(valida == 0){
-						System.out.println("Conta inexistente!");
-				}
-				break;
-			case 2:
-				for(int i = 0; i < Poupanca.listaPoupancas.size(); i++) {
-					if(Poupanca.listaPoupancas.get(i).getNumero() == numero){
-						Poupanca.listaPoupancas.get(i).setSaldo(Poupanca.listaPoupancas.get(i).getSaldo() + transferencia);
-						valida++;
-						System.out.println("Transferência concluída com sucesso!");
+					break;
+				case 2:
+					for(int i = 0; i < Poupanca.listaPoupancas.size(); i++) {
+						if(Poupanca.listaPoupancas.get(i).getNumero() == numero){
+							if(Poupanca.listaPoupancas.get(i).isStatus() == true){
+								Poupanca.listaPoupancas.get(i).setSaldo(Poupanca.listaPoupancas.get(i).getSaldo() + transferencia);
+							}else{
+								System.out.println("Conta desativada!");
+							}
+						}else {
+							System.out.println("Conta inexistente!");
+						}
 					}
-				}
-				if(valida == 0){
-						System.out.println("Conta inexistente!");
-				}
-				break;
-		}
-		switch(opcao){
-			case 1:
-				Corrente.listaCorrentes.get(indice).setSaldo(Corrente.listaCorrentes.get(indice).getSaldo() - transferencia);
-				break;
-			case 2:
-				Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() - transferencia);
-				break;
+					break;
+			}
+		}else{
+			System.out.println("SALDO INDISPONÍVEL");
 		}
 	}
-	
+
 	public Corrente() {
 		super();
 	}

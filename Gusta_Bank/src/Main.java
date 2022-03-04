@@ -10,9 +10,26 @@ public class Main {
 		cc.setNumero(123);
 		cc.setSenha("321");
 		cc.setSaldo(1000);
+		cc.setStatus(true);
 		Corrente.listaCorrentes.add(cc);
-		menuPrincipal();
 
+		Poupanca c2 = new Poupanca();
+		c2.setNumero(123);
+		c2.setSenha("321");
+		c2.setSaldo(1000);
+		c2.setStatus(true);
+		Poupanca.listaPoupancas.add(c2);
+
+		Credito c3 = new Credito();
+		c3.setLimite(3000);
+		c3.setLimiteVariavel(c3.limite);
+		c3.setNumero(123);
+		c3.setSenha("321");
+		c3.setSaldo(1000);
+		c3.setStatus(true);
+		Credito.listaCreditos.add(c3);
+
+	menuPrincipal();
 	}
 
 	public static void menuPrincipal() {
@@ -107,10 +124,11 @@ public class Main {
 			break;
 		case 2:
 			System.out.println("Limite: ");
-			limite = tec.nextDouble();	
+			limite = tec.nextDouble();
+			double limiteVariavel = limite;
 			System.out.print("Data de fatura: ");
 			int dataFatura = tec.nextInt();
-			Credito credito = new Credito(saldo, titular, senha, numero, status, limite, dataFatura);
+			Credito credito = new Credito(saldo, titular, senha, numero, status, limite, dataFatura, limiteVariavel);
 			Credito.listaCreditos.add(credito);
 			break;
 		case 3:
@@ -294,7 +312,7 @@ public class Main {
 			menuCorrente(indice, opcao);
 			break;
 		case 5:
-			Corrente.transferencia(indice, opcao);
+			Corrente.transferencia(indice);
 			menuCorrente(indice, opcao);
 			break;
 		case 6:
@@ -340,16 +358,19 @@ public class Main {
 			menuPoupanca(indice, opcao);
 			break;
 		case 2:
-			Conta.verSaldo(indice, opcao);
-			menuPoupanca(indice, opcao);
-			break;
-		case 3:
 			Conta.saque(indice, opcao);
 			menuPoupanca(indice, opcao);
 			break;
-		case 4:
-			Corrente.transferencia(indice, opcao);
+		case 3:
+			Poupanca.deposito(indice);
 			menuPoupanca(indice, opcao);
+			break;
+		case 4:
+			Poupanca.transferencia(indice);
+			menuPoupanca(indice, opcao);
+			break;
+		case 5:
+			menuUsuario();
 			break;
 		}
 	}
@@ -377,9 +398,10 @@ public class Main {
 
 	private static void menuCredito(int indice, int opcao) {
 		System.out.println("--- MENU CRÉDITO ---"
-				+ "\n1- Ver limite" +
-				"\n2- Pagamento"
-				+ "\n5- Voltar");
+				+ "\n1- Ver limite total" +
+				"\n2- Ver limite disponível" +
+				"\n3- Pagamento"
+				+ "\n4- Voltar");
 		int opcao2 = tec.nextInt();
 
 		switch(opcao2) {
@@ -388,11 +410,15 @@ public class Main {
 				menuCredito(indice, opcao);
 				break;
 			case 2:
-				Corrente.pagamento(indice, opcao);
+				System.out.println(Credito.listaCreditos.get(indice).getLimiteVariavel());
 				menuCredito(indice, opcao);
 				break;
 			case 3:
-				menuUsuarioCredito(opcao);
+				Corrente.pagamento(indice, opcao);
+				menuCredito(indice, opcao);
+				break;
+			case 4:
+				menuUsuario();
 				break;
 		}
 	}
