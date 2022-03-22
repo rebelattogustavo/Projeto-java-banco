@@ -2,71 +2,277 @@ import java.util.Scanner;
 
 public class Main {
 
-	static Scanner tec = new Scanner(System.in);
-
+	static Scanner sc = new Scanner(System.in);
+	
 	public static void main(String[] args) {
-		Corrente cc = new Corrente();
-		cc.setLimite(300);
-		cc.setNumero(123);
-		cc.setSenha("321");
-		cc.setSaldo(1000);
-		cc.setStatus(true);
-		Corrente.listaCorrentes.add(cc);
+		Corrente contaCorr1 = new Corrente();
+		contaCorr1.setNumero(123);
+		contaCorr1.setLimite(2000);
+		contaCorr1.setSenha("123");
+		contaCorr1.setTitular("Leozin");
+		contaCorr1.setSaldo(1000);
+		contaCorr1.setStatus(true);
+		Corrente.listaCorrente.add(contaCorr1);
 
-		Poupanca c2 = new Poupanca();
-		c2.setNumero(123);
-		c2.setSenha("321");
-		c2.setSaldo(1000);
-		c2.setStatus(true);
-		Poupanca.listaPoupancas.add(c2);
+		Poupanca contaPoup1 = new Poupanca();
+		contaPoup1.setNumero(321);
+		contaPoup1.setSenha("321");
+		contaPoup1.setStatus(true);
+		contaPoup1.setTitular("Rafaelli");
+		contaPoup1.setSaldo(2000);
+		contaPoup1.setRendimento(9.3);
+		Poupanca.listaPoupanca.add(contaPoup1);
 
-		Credito c3 = new Credito();
-		c3.setLimite(3000);
-		c3.setLimiteVariavel(c3.limite);
-		c3.setNumero(123);
-		c3.setSenha("321");
-		c3.setSaldo(1000);
-		c3.setStatus(true);
-		Credito.listaCreditos.add(c3);
+		Credito contaCred1 = new Credito();
+		contaCred1.setNumero(456);
+		contaCred1.setSenha("456");
+		contaCred1.setStatus(true);
+		contaCred1.setTitular("Leo Rafaelli");
+		contaCred1.setSaldo(5000);
+		contaCred1.setDataFatura(892004);
+		contaCred1.setLimiteTotal(2000);
+		contaCred1.setLimite(contaCred1.getLimiteTotal());
+		Credito.listaCredito.add(contaCred1);
 
-	menuPrincipal();
+		menuPrincipal();
 	}
 
-	public static void menuPrincipal() {
+	private static void menuPrincipal() {
+		Scanner sc = new Scanner(System.in);
 
-		System.out.println("---- MENU PRINCIPAL ----" 
-				+ "\n1- Gerência" 
-				+ "\n2- Usuário"
-				+ "\n3- Fechar");
-		int opcao = tec.nextInt();
+		System.out.print(
+					"\n------ MENU PRINCIPAL ------" 
+					+ "\n1 - Gerência;" 
+					+ "\n2 - Usuário;"
+					+ "\n3 - Fechar."
+					+ "\nDigite aqui: ");
+		int opcao = sc.nextInt();
 
 		switch (opcao) {
-		case 1:
-			menuGerencia();
-
-			break;
-		case 2:
-			menuUsuario();
-			break;
-		case 3: 
-			System.exit(0);
-			break;
-		default:
-			System.out.println("Anta! É de 1 a 3 pô.");
-			menuPrincipal();
+			case 1 -> menuGerencia();
+			case 2 -> menuUsuário();
+			case 3 -> System.exit(0);
+			default -> {
+				System.out.println("Anta! É de 1 à 3 pô.");
+				menuPrincipal();
+			}
 		}
+
 	}
 
 	
-	public static void menuGerencia() {
-		int opcao;
+	// CÓDIGOS DE USUÁRIO
+	private static void menuUsuário() {
+		System.out.print("\n------ MENU USUÁRIO ------"
+				+ "\nSelecione o tipo da conta:"
+				+ "\n1 - Corrente;" 
+				+ "\n2 - Crédito;"
+				+ "\n3 - Poupança;"
+				+ "\n4 - Voltar;"
+				+ "\nDigite aqui: ");
+		int opcao = sc.nextInt();
+		switch (opcao) {
+			case 1:
+				entradaContaCorrente(opcao);
+				break;
+			case 2:
+				entradaContaCredito(opcao);
+				break;
+			case 3:
+				entradaContaPoupanca(opcao);
+				break;
+			case 4:
+				menuPrincipal();
+				break;
+			default:
+				System.out.println("Anta! É de 1 à 4 pô.");
+				menuGerencia();
+				break;
+		};
+	}
+
+	private static void entradaContaPoupanca(int tipoConta){
+
+		System.out.print("\n------ CONTA POUPANÇA ------" +
+				"\nDigite o número da conta (0 - Voltar): ");
+		int conta = sc.nextInt();
+		if(conta == 0){
+			menuUsuário();
+		}
+		System.out.print("Digite a senha: ");
+		String senha = sc.next();
+
+		int iPoup = Conta.acharConta(tipoConta, conta);
+		if(iPoup != -1){
+			if (Poupanca.listaPoupanca.get(iPoup).getSenha().equals(senha)) {
+				menuContaPoupanca(tipoConta, iPoup);
+			}
+		} else {
+		System.out.println("Número ou senha incorretos!");
+		}
+		entradaContaCredito(tipoConta);
+	}
+
+	private static void menuContaPoupanca(int tipoConta, int i){
+		System.out.println("""
+				------ MENU CONTA POUPANÇA ------
+				1 - Depósito;
+				2 - Transferência;
+				3 - Ver saldo;
+				4 - Voltar.
+				Digite aqui:\s""");
+		int opcao = sc.nextInt();
+		switch (opcao){
+			case 1:
+				Poupanca.deposito(i);
+				break;
+			case 2:
+				Poupanca.transferencia(tipoConta, i);
+				break;
+			case 3:
+				Conta.saldo(tipoConta, i);
+				break;
+			case 4:
+				entradaContaPoupanca(tipoConta);
+				break;
+			default:
+				System.out.println("Digite um número entre 1 e 4.");
+				menuContaPoupanca(tipoConta, i);
+				break;
+		}
+	}
+
+
+	private static void entradaContaCredito(int tipoConta) {
+		System.out.print("\n------ CONTA CREDITO ------" +
+				"\nDigite o número da conta (0 - Voltar): ");
+		int conta = sc.nextInt();
+		if(conta == 0){
+			menuUsuário();
+		}
+		System.out.print("Digite a senha: ");
+		String senha = sc.next();
+
+		int iCredito = Conta.acharConta(tipoConta, conta);
+		if(iCredito != -1){
+			if (Credito.listaCredito.get(iCredito).getSenha().equals(senha)) {
+				menuContaCredito(tipoConta, iCredito);
+			}
+		}
+		System.out.println("Número ou senha incorretos!");
+		entradaContaCredito(tipoConta);
+	}
+
+	private static void menuContaCredito(int tipoConta, int i){
+		System.out.print("\n----- MINHA CONTA CREDITO ------\n1 - Pagamento;\n2 - Ver saldo;\n3 - Ver limite total;\n4 - Ver limite disponível;" +
+				"\n5 - Voltar.\nDigite aqui: ");
+		int opcao = sc.nextInt();
+
+		switch (opcao){
+			case 1:
+				Credito.pagamento(tipoConta, i);
+				break;
+			case 2:
+				Conta.saldo(tipoConta, i);
+				break;
+			case 3:
+				Credito.verLimiteTotal(i);
+				break;
+			case 4:
+				Credito.verLimiteRestante(i);
+			case 5:
+				entradaContaCredito(tipoConta);
+				break;
+			default:
+				System.out.println("Digite um número entre 1 e 3");
+				break;
+		}
+		menuContaCredito(tipoConta, i);
+	}
+	
+	private static void entradaContaCorrente(int tipoConta) {
+		int i, verificar = 0, indice;
+
+		System.out.print("\n------ CONTA CORRENTE ------" +
+				"\nDigite o número da conta (0 - Voltar): ");
+		int conta = sc.nextInt();
+		if(conta == 0){
+			menuUsuário();
+		}
+		System.out.print("Digite a senha: ");
+		String senha = sc.next();
+			for(i = 0; i < Corrente.listaCorrente.size(); i++) {
+				if (Corrente.listaCorrente.get(i).getNumero() == conta) {
+					if (Corrente.listaCorrente.get(i).getSenha().equals(senha)) {
+						verificar = 1;
+						indice = i;
+						menuOpcoesCorrente(tipoConta, indice);
+					}
+				}
+			}
+		if(verificar != 1){
+		System.out.println("Número ou senha incorretos!");
+		entradaContaCorrente(tipoConta);
+		}
+	}
+	
+	private static void menuOpcoesCorrente(int tipoConta, int indice) {
+		System.out.print("""
 		
-		System.out.println("---- MENU GERENCIA ----" 
-				+ "\n1- Cadastrar Conta" 
-				+ "\n2- Bloquar Conta" 
-				+ "\n3 - Listar Contas"
-				+ "\n4- Voltar");
-		opcao = tec.nextInt();
+		------ MENU MINHA CONTA CORRENTE ------
+		1 - Ver Saldo;
+		2 - Saque;
+		3 - Depósito;
+		4 - Transferência;
+		5 - Pagamento;
+		6 - Voltar.
+		Digite aqui:\s""");
+		int opcao = sc.nextInt();
+		switch(opcao){
+			case 1:
+				Conta.saldo(tipoConta, indice);
+				menuOpcoesCorrente(tipoConta, indice);
+				break;
+			case 2:
+				Conta.saque(tipoConta, indice);
+				menuOpcoesCorrente(tipoConta, indice);
+				break;
+			case 3:
+				Corrente.deposito(indice);
+				menuOpcoesCorrente(tipoConta, indice);
+				break;
+			case 4:
+				Corrente.transferencia(tipoConta, indice);
+				menuOpcoesCorrente(tipoConta, indice);
+				break;
+			case 5:
+				break;
+			case 6:
+				entradaContaCorrente(tipoConta);
+				break;
+			default:
+				System.out.println("Por favor, digite um número de 1 à 4");
+				menuOpcoesCorrente(tipoConta, indice);
+				break;
+		}
+	};
+	
+	
+	
+	
+	
+	
+	
+	
+	// CÓDIGOS DE GERENCIAMENTO
+	private static void menuGerencia() {
+		System.out.print("\n------ MENU GERÊNCIA ------" 
+							+ "\n1 - Cadastrar Conta;" 
+							+ "\n2 - Bloquear Conta;"
+							+ "\n3 - Listar Contas;"
+							+ "\n4 - Voltar."
+							+ "\nDigite aqui: ");
+		int opcao = sc.nextInt();
 		switch (opcao) {
 		case 1:
 			menuCadastro();
@@ -74,7 +280,6 @@ public class Main {
 		case 2:
 			menuBloqueio();
 			break;
-
 		case 3:
 			menuListar();
 			break;
@@ -84,343 +289,179 @@ public class Main {
 		default:
 			System.out.println("Anta! É de 1 à 4 pô.");
 			menuGerencia();
-		}
+			break;
+		};
 	}
 	
-	public static void menuCadastro() {
-		System.out.println("---- MENU CADASTRO ----" + 
-				"\n1- Corrente" 
-				+ "\n2- Crédito" 
-				+ "\n3- Poupança"
-				+ "\n4- Voltar");
-		int opcao = tec.nextInt();
-		if(opcao > 0 && opcao < 4) {
+	
+	
+	
+	private static void menuCadastro() {
+		System.out.print(
+				"\n------ MENU CADASTRO ------" 
+				+ "\n1 - Corrente;" 
+				+ "\n2 - Crédito;"
+				+ "\n3 - Poupança;"
+				+ "\n4 - Voltar."
+				+ "\nDigite aqui: ");
+		int opcao = sc.nextInt();
+		if (opcao > 0 && opcao < 4) {
 			cadastrar(opcao);
-		}else if(opcao == 4){
+		} else if(opcao == 4){
 			menuGerencia();
-		}else {
-			System.out.println("Anta! É de 1 a 4 pô.");
+		} else {
+			System.out.println("Anta! é de 1 à 4 pô.");
 			menuCadastro();
 		}
 	}
 	
-	public static void cadastrar(int opcao) {		
+	private static void menuBloqueio() {
+		System.out.print(
+				"\n------ MENU BLOQUEIO ------" 
+				+ "\n1 - Corrente;" 
+				+ "\n2 - Crédito;"
+				+ "\n3 - Poupança"
+				+ "\n4 - Voltar"
+				+ "\nDigite aqui: ");
+		int opcao = sc.nextInt();
 		
-		System.out.println("Número da conta: ");
-		int numero = tec.nextInt();
-		System.out.println("Titular: ");
-		String titular = tec.next();
-		System.out.println("Senha: ");
-		String senha = tec.next();
+		System.out.print("Informe o número da conta a ser bloqueada: ");
+		int conta = sc.nextInt();
 		
-		boolean status = true;
-		double saldo = 0.0;
-		switch(opcao) {
-		case 1:
-			System.out.println("Limite: ");
-			double limite = tec.nextDouble();
-			Corrente correnteTemp = new Corrente(saldo, titular, senha, numero, status, limite);
-			Corrente.listaCorrentes.add(correnteTemp);
-			break;
-		case 2:
-			System.out.println("Limite: ");
-			limite = tec.nextDouble();
-			double limiteVariavel = limite;
-			System.out.print("Data de fatura: ");
-			int dataFatura = tec.nextInt();
-			Credito credito = new Credito(saldo, titular, senha, numero, status, limite, dataFatura, limiteVariavel);
-			Credito.listaCreditos.add(credito);
-			break;
-		case 3:
-			System.out.println("Rendimento: ");
-			double rendimento = tec.nextDouble();
-			Poupanca poupancaTemp = new Poupanca(saldo, titular, senha, numero, status, rendimento);
-			Poupanca.listaPoupancas.add(poupancaTemp);
-			break;
-		}
-		System.out.println("Cadastro realizado com sucesso!");
-		menuCadastro();
-	}
-
-	
-	public static void menuBloqueio(){
-		System.out.println("---- MENU BLOQUEIO ----" 
-				+ "\n1- Corrente" 
-				+ "\n2- Crédito" 
-				+ "\n3- Poupança"
-				+ "\n4- Voltar");
-		int opcao = tec.nextInt();
-		if(opcao > 0 && opcao < 4) {
-			System.out.print("Informe o número da conta a ser bloquada: ");
-			int conta = tec.nextInt();
+		if (opcao > 0 && opcao < 4) {
 			cancelar(opcao, conta);
-		}else if(opcao == 4){
+		} else if(opcao == 4){
 			menuGerencia();
-		}else {
-			System.out.println("Anta! É de 1 a 4 pô.");
+		} else {
+			System.out.println("Anta! é de 1 à 4 pô.");
 			menuBloqueio();
 		}
-		System.out.println("Conta cancelada com sucesso!");
-		menuBloqueio();
 	}
 	
-	private static void cancelar(int opcao, int conta) {
+	public static void cancelar(int opcao, int conta) {
+		int i;
 		switch(opcao) {
 		case 1:
-			for(int i =0; i < Corrente.listaCorrentes.size(); i++) {
-				if(Corrente.listaCorrentes.get(i).getNumero() == conta) {
-					Corrente.listaCorrentes.get(i).setStatus(false);
+			for(i = 0; i < Corrente.listaCorrente.size(); i++){
+				if(Corrente.listaCorrente.get(i).getNumero() == conta) {
+					Corrente.listaCorrente.get(i).setStatus(false);
 				}
 			}
 			break;
 		case 2:
-			for(int i =0; i < Credito.listaCreditos.size(); i++) {
-				if(Credito.listaCreditos.get(i).getNumero() == conta) {
-					Credito.listaCreditos.get(i).setStatus(false);
+			for(i = 0; i < Credito.listaCredito.size(); i++){
+				if(Credito.listaCredito.get(i).getNumero() == conta) {
+					Credito.listaCredito.get(i).setStatus(false);
 				}
-			}			break;
+			}
+			break;
 		case 3:
-			for(int i =0; i < Poupanca.listaPoupancas.size(); i++) {
-				if(Poupanca.listaPoupancas.get(i).getNumero() == conta) {
-					Poupanca.listaPoupancas.get(i).setStatus(false);
+			for(i = 0; i < Poupanca.listaPoupanca.size(); i++){
+				if(Poupanca.listaPoupanca.get(i).getNumero() == conta) {
+					Poupanca.listaPoupanca.get(i).setStatus(false);
 				}
-			}			break;
+			}
+			
+			break;
 		}
-		
+		System.out.println("Conta cancelada com sucesso paeee!");
+		menuBloqueio();
 	}
-
+	
+	
 	private static void menuListar() {
-		System.out.println("---- MENU LISTAR ----" 
-				+ "\n1- Corrente" 
-				+ "\n2- Crédito" 
-				+ "\n3- Poupança"
-				+ "\n4- Voltar");
-		int opcao = tec.nextInt();
-		if(opcao > 0 && opcao < 4) {
+		System.out.print(
+				"\n------ MENU LISTAR ------" 
+				+ "\n1 - Corrente;" 
+				+ "\n2 - Crédito;"
+				+ "\n3 - Poupança;"
+				+ "\n4 - Voltar."
+				+ "\nDigite aqui: ");
+		int opcao = sc.nextInt();
+		
+		if (opcao > 0 && opcao < 4) {
 			listar(opcao);
-		}else if(opcao == 4){
+		} else if(opcao == 4){
 			menuGerencia();
-		}else {
-			System.out.println("Anta! É de 1 a 4 pô.");
+		} else {
+			System.out.println("Anta! é de 1 à 4 pô.");
 			menuListar();
 		}
 	}
 	
-
+	
+	
 	private static void listar(int opcao) {
 		switch(opcao) {
 		case 1:
-			for(int i =0; i < Corrente.listaCorrentes.size(); i++) {
-				System.out.println(Corrente.listaCorrentes.get(i).toString()); 
-				if(i+1 != Corrente.listaCorrentes.size()) {
-					System.out.println("--------------------------");
+			for(int i = 0; i < Corrente.listaCorrente.size(); i++) {
+				System.out.println(Corrente.listaCorrente.get(i).toString());
+				if(i+1 != Corrente.listaCorrente.size()) {
+					System.out.println("------------------");
 				}
 			}
-		break;
+			break;
 		case 2:
-			for(int i =0; i < Credito.listaCreditos.size(); i++) {
-				System.out.println(Credito.listaCreditos.get(i).toString());
-				if(i+1 != Credito.listaCreditos.size()) {
-					System.out.println("--------------------------");
+			for(int i = 0; i < Credito.listaCredito.size(); i++) {
+				System.out.println(Credito.listaCredito.get(i).toString());
+				if(i+1 != Credito.listaCredito.size()) {
+					System.out.println("------------------");
 				}
 			}
 			break;
 		case 3:
-			for(int i =0; i < Poupanca.listaPoupancas.size(); i++) {
-				System.out.println(Poupanca.listaPoupancas.get(i).toString());
-				if(i+1 != Poupanca.listaPoupancas.size()) {
-					System.out.println("--------------------------");
+			for(int i = 0; i < Poupanca.listaPoupanca.size(); i++) {
+				System.out.println(Poupanca.listaPoupanca.get(i).toString());
+				if(i+1 != Poupanca.listaPoupanca.size()) {
+					System.out.println("------------------");
 				}
 			}
-			break;
 		}
 		menuListar();
 	}
-
-
-	private static void menuUsuario() {
-		System.out.println("--- MENU USUÁRIO ---"
-				+ "\nInforme o tipo da sua conta: "
-				+ "\n1- Corrente"
-				+ "\n2- Crédito"
-				+ "\n3- Poupança"
-				+ "\n4- Voltar");
-		int opcao = tec.nextInt();
+	
+	private static void cadastrar(int opcao) {
+		
+		System.out.print("\nNúmero da conta: ");
+		int numero = sc.nextInt();
+		System.out.print("Titular: ");
+		String titular = sc.next();
+		System.out.print("Senha: ");
+		String senha = sc.next();
+		boolean status = true;
+		double saldo = 0.0;
+		
 		switch(opcao) {
 		case 1:
-			menuUsuarioCorrente(opcao);
+			System.out.print("Limite: ");
+			double limite = sc.nextDouble();
+			Corrente corrente = new Corrente(saldo, titular, senha, status, numero, limite);
+			Corrente.listaCorrente.add(corrente);
 			break;
-		case 2:
-			menuUsuarioCredito(opcao);
-			break;
-		case 3:
-			menuUsuarioPoupanca(opcao);
-			break;
-		case 4:
-			menuPrincipal();
-			break;
-		}
-	}
 			
-
-	private static void menuUsuarioCorrente(int opcao) {
-		System.out.print("Informe o número da conta: ");
-		int conta = tec.nextInt();
-
-		int valida =0;
-
-		System.out.print("Informe a senha da conta: ");
-		String senha = tec.next();
-		for(int i =0; i < Corrente.listaCorrentes.size();i++) {
-			if(Corrente.listaCorrentes.get(i).getNumero() == conta && Corrente.listaCorrentes.get(i).getSenha().equals(senha)) {
-				int indice = i;
-				menuCorrente(indice, opcao);
-				valida++;
-			}
-		}
-		if(valida == 0){
-				System.out.println("Conta inexistente tente novamente!");
-				menuUsuarioCorrente(opcao);
-		}
-	}
-	
-	private static void menuCorrente(int indice, int opcao) {
-		System.out.println("--- MENU CORRENTE ---"
-				+ "\nO que você deseja fazer?"
-				+ "\n1-Ver saldo"
-				+ "\n2- Saque"
-				+ "\n3- Pagamento"
-				+ "\n4- Depósito"
-				+ "\n5- Transferência"
-				+ "\n6- Voltar");
-		int opcao2 = tec.nextInt();
-		switch(opcao2) {
-		case 1:
-			Conta.verSaldo(indice, opcao);
-			menuCorrente(indice, opcao);
-			break;
 		case 2:
-			Conta.saque(indice, opcao);
-			menuCorrente(indice, opcao);
+			System.out.print("Limite: ");
+			limite = sc.nextDouble();
+			System.out.print("Limite total: ");
+			double limiteTotal = sc.nextDouble();
+			System.out.print("Data da fatura: ");
+			int dataFatura = sc.nextInt();
+			Credito credito = new Credito(saldo, titular, senha, status, numero, limite, limiteTotal, dataFatura);
+			Credito.listaCredito.add(credito);
 			break;
-		case 3: 
-			Corrente.pagamento(indice, opcao);
-			menuCorrente(indice, opcao);
-			break;
-		case 4:
-			Corrente.deposito(indice);
-			menuCorrente(indice, opcao);
-			break;
-		case 5:
-			Corrente.transferencia(indice);
-			menuCorrente(indice, opcao);
-			break;
-		case 6:
-			menuUsuario();
-			break;
-		}
-		
-	}
-
-	private static void menuUsuarioPoupanca(int opcao) {
-		System.out.print("Informe o número da conta: ");
-		int conta = tec.nextInt();
-		
-		System.out.print("Informe a senha da conta: ");
-		String senha = tec.next();
-
-		int valida=0;
-		for(int i =0; i < Poupanca.listaPoupancas.size();i++) {
-			if(Poupanca.listaPoupancas.get(i).getNumero() == conta && Poupanca.listaPoupancas.get(i).getSenha().equals(senha)) {
-				int indice = i;
-				menuPoupanca(indice, opcao);
-				valida++;
-			}
-		}
-		if(valida == 0){
-			System.out.println("Conta inexistente tente novamente!");
-			menuUsuarioPoupanca(opcao);
-		}
-	}
-	
-	private static void menuPoupanca(int indice, int opcao) {
-		System.out.println("--- MENU POUPANÇA ---"
-				+ "\n1- Ver saldo"
-				+ "\n2- Saque"
-				+ "\n3- Depósito"
-				+ "\n4- Transferência"
-				+ "\n5- Voltar");
-		int opcao2 = tec.nextInt();
-		
-		switch(opcao2) {
-		case 1:
-			Conta.verSaldo(indice, opcao);
-			menuPoupanca(indice, opcao);
-			break;
-		case 2:
-			Conta.saque(indice, opcao);
-			menuPoupanca(indice, opcao);
-			break;
+			
 		case 3:
-			Poupanca.deposito(indice);
-			menuPoupanca(indice, opcao);
-			break;
-		case 4:
-			Poupanca.transferencia(indice);
-			menuPoupanca(indice, opcao);
-			break;
-		case 5:
-			menuUsuario();
+			System.out.println("Rendimento: ");
+			double rendimento = sc.nextDouble();
+			Poupanca poupança = new Poupanca(saldo, titular, senha, status, numero, rendimento);
+			Poupanca.listaPoupanca.add(poupança);
 			break;
 		}
+		System.out.println("Cadastro realizado com sucesso!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		menuCadastro();
 	}
-
-	private static void menuUsuarioCredito(int opcao) {
-		System.out.print("Informe o número da conta: ");
-		int conta = tec.nextInt();
-
-		System.out.print("Informe a senha da conta: ");
-		String senha = tec.next();
-
-		int valida=0;
-		for(int i =0; i < Credito.listaCreditos.size();i++) {
-			if(Credito.listaCreditos.get(i).getNumero() == conta && Credito.listaCreditos.get(i).getSenha().equals(senha)) {
-				int indice = i;
-				menuCredito(indice, opcao);
-				valida++;
-			}
-		}
-		if(valida == 0){
-			System.out.println("Conta inexistente tente novamente!");
-			menuUsuarioCredito(opcao);
-		}
-	}
-
-	private static void menuCredito(int indice, int opcao) {
-		System.out.println("--- MENU CRÉDITO ---"
-				+ "\n1- Ver limite total" +
-				"\n2- Ver limite disponível" +
-				"\n3- Pagamento"
-				+ "\n4- Voltar");
-		int opcao2 = tec.nextInt();
-
-		switch(opcao2) {
-			case 1:
-				System.out.println(Credito.listaCreditos.get(indice).getLimite());
-				menuCredito(indice, opcao);
-				break;
-			case 2:
-				System.out.println(Credito.listaCreditos.get(indice).getLimiteVariavel());
-				menuCredito(indice, opcao);
-				break;
-			case 3:
-				Corrente.pagamento(indice, opcao);
-				menuCredito(indice, opcao);
-				break;
-			case 4:
-				menuUsuario();
-				break;
-		}
-	}
-
+	
+	
+	
+	
 }

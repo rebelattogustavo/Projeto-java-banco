@@ -1,11 +1,104 @@
 import java.util.ArrayList;
 
-public class Poupanca extends Conta{
+public class Poupanca extends Conta {
 	
-	double rendimento;
+	private double rendimento;
+
+	static ArrayList<Poupanca> listaPoupanca = new ArrayList<Poupanca>();
 	
-	static ArrayList<Poupanca> listaPoupancas = new ArrayList<Poupanca>();
+
+
+	@Override
+	public String toString() {
+		return super.toString() + "\nRendimento: " + rendimento;
+	}
 	
+	
+
+	public Poupanca(double saldo, String titular, String senha, boolean status, int numero, double rendimento) {
+		super(saldo, titular, senha, status, numero);
+		this.rendimento = rendimento;
+	}
+
+
+
+	public Poupanca() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public static void deposito(int indice) {
+		System.out.print("Digite o valor do depósito: ");
+		double valorDeposito = sc.nextDouble();
+		double saldoAntigo = listaPoupanca.get(indice).getSaldo();
+		listaPoupanca.get(indice).setSaldo(listaPoupanca.get(indice).getSaldo() + valorDeposito);
+
+		System.out.println("Saldo antigo: " + saldoAntigo);
+		System.out.println("Saldo atual: " + listaPoupanca.get(indice).getSaldo());
+	}
+
+	public static void transferencia(int tipoConta, int indice) {
+		System.out.print("""
+								
+		Informe o tipo da conta que deseja fazer a transferência
+		1 - Corrente;
+		2 - Poupança;
+		3 - Voltar.
+		Digite aqui:\s""");
+		int contaTrans = sc.nextInt();
+		if(contaTrans != 3){
+
+		System.out.print("\nDigite a conta do favorecido: ");
+		int numContaFav = sc.nextInt();
+
+		System.out.print("\nDigite o valor da transferência: R$ ");
+		double valorTrans = sc.nextDouble();
+
+		int foundAcc = 0;
+
+		switch(contaTrans){
+			case 1:
+				int iCorrente = Conta.acharConta(contaTrans, numContaFav);
+				if(Corrente.listaCorrente.get(iCorrente).getSaldo() > valorTrans){
+					Corrente.listaCorrente.get(iCorrente).setSaldo(Corrente.listaCorrente.get(iCorrente).getSaldo() + valorTrans);
+					foundAcc = 1;
+				} else {
+					System.out.print("Você não possui saldo suficiente para realiar esta transferência!");
+				}
+
+				if(foundAcc ==  0){
+					System.out.println("\nConta corrente não encontrada.");
+					transferencia(tipoConta, indice);
+				} else {
+					listaPoupanca.get(indice).setSaldo(listaPoupanca.get(indice).getSaldo() - valorTrans);
+				}
+				break;
+			case 2:
+				int iPoupanca = Conta.acharConta(contaTrans, numContaFav);
+				if(Poupanca.listaPoupanca.get(iPoupanca).getSaldo() > valorTrans){
+					Poupanca.listaPoupanca.get(iPoupanca).setSaldo(Poupanca.listaPoupanca.get(iPoupanca).getSaldo() + valorTrans);
+					foundAcc = 1;
+				} else {
+					System.out.print("Você não possui saldo suficiente para realiar esta transferência!");
+				}
+
+				if(foundAcc ==  0){
+					System.out.println("\nConta corrente não encontrada.");
+					transferencia(tipoConta, indice);
+				} else {
+					listaPoupanca.get(indice).setSaldo(listaPoupanca.get(indice).getSaldo() - valorTrans);
+				}
+				break;
+			default:
+				break;
+		};
+	}
+	}
+
+
+
+//	Getters and Setters
 	public double getRendimento() {
 		return rendimento;
 	}
@@ -14,74 +107,6 @@ public class Poupanca extends Conta{
 		this.rendimento = rendimento;
 	}
 
-	
-	public Poupanca() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
-
-	public Poupanca(double saldo, String titular, String senha, int numero, boolean status, double rendimento) {
-		super(saldo, titular, senha, numero, status);
-		this.rendimento = rendimento;
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "\nRendimento: " + rendimento;
-	}
-
-	public static void transferencia(int indice) {
-		System.out.println("--- MENU TRANSFERÃŠNCIA ---"
-				+ "\n1- Corrente"
-				+ "\n2- PoupanÃ§a");
-		int opcao = tec.nextInt();
-
-		System.out.print("Informe o valor da transferÃªncia: R$");
-		double transferencia = tec.nextDouble();
-
-		System.out.print("Informe o nÃºmero da conta que serÃ¡ transferido o dinheiro: ");
-		int numero = tec.nextInt();
-		if(Poupanca.listaPoupancas.get(indice).getSaldo()  >= transferencia) {
-			Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() - transferencia);
-			switch(opcao) {
-				case 1:
-					for(int i = 0; i < Corrente.listaCorrentes.size(); i++) {
-						if(Corrente.listaCorrentes.get(i).getNumero() == numero){
-							if(Corrente.listaCorrentes.get(i).isStatus() == true){
-							Corrente.listaCorrentes.get(i).setSaldo(Corrente.listaCorrentes.get(i).getSaldo() + transferencia);
-							}else{
-								System.out.println("Conta desativada!");
-							}
-						}else {
-							System.out.println("Conta inexistente!");
-						}
-					}
-					break;
-				case 2:
-					for(int i = 0; i < Poupanca.listaPoupancas.size(); i++) {
-						if(Poupanca.listaPoupancas.get(i).getNumero() == numero){
-							if(Poupanca.listaPoupancas.get(i).isStatus() == true){
-							Poupanca.listaPoupancas.get(i).setSaldo(Poupanca.listaPoupancas.get(i).getSaldo() + transferencia);
-							}else{
-								System.out.println("Conta desativada!");
-							}
-						}else {
-							System.out.println("Conta inexistente!");
-						}
-					}
-					break;
-			}
-		}else{
-			System.out.println("SALDO INDÃSPONIVEL");
-		}
-	}
-
-	public static void deposito(int indice) {
-		System.out.print("Informe o valor do depÃ³sito: R$");
-		double deposito = tec.nextDouble();
-		Poupanca.listaPoupancas.get(indice).setSaldo(Poupanca.listaPoupancas.get(indice).getSaldo() + deposito);
-	}
 
 }
