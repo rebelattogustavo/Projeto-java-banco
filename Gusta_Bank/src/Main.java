@@ -256,14 +256,7 @@ public class Main {
 				break;
 		}
 	};
-	
-	
-	
-	
-	
-	
-	
-	
+
 	// CÓDIGOS DE GERENCIAMENTO
 	private static void menuGerencia() {
 		System.out.print("\n------ MENU GERÊNCIA ------" 
